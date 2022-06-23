@@ -5,7 +5,7 @@
 #include<stdlib.h>
 #include<sys/wait.h>
 
-#define DEFAULT_NUM_PRINT_LINES 1
+#define DEFAULT_NUM_PRINT_LINES 2
 #define DEFAULT_BUFFER_SIZE 256
 
 void update_history(char *cmd) {
@@ -159,8 +159,6 @@ char* my_tail(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 		}
 
 		skip_lines = total_lines - num_print_lines;
-
-		printf("%d %d %d\n", skip_lines, num_print_lines, total_lines);
 
 		while(*pipe_data != '\0') {
 			if(skip_lines <= 0 && is_print_data) printf("%c",*pipe_data);
