@@ -106,14 +106,12 @@ char* my_head(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 			printf("Error processing file %s\n", args[0]);
 		}
 	} else {
-		while(num_print_lines && pipe_data!='\0') {
+		while(num_print_lines && *pipe_data!='\0') {
 			write_buf[str_len++] = *pipe_data;	
-			if(is_print_data) printf("%c",*pipe_data++);
-			if(*pipe_data == '\n') num_print_lines--;	
+			if(is_print_data) printf("%c",*pipe_data);
+			if(*pipe_data++ == '\n') num_print_lines--;	
 		}
-
-		printf("\n");
-		write_buf[str_len++] = '\n';
+		
 		write_buf[str_len] = '\0';	
 	}
 
