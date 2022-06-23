@@ -32,7 +32,7 @@ void update_history(char *cmd) {
 }
 
 int my_cp(int arg_count, char *args[]) {
-	char buf[256];
+	char buf[DEFAULT_BUFFER_SIZE];
 
 	if(arg_count < 2) {
 		printf("Usage: mycp <file_name>");
@@ -43,7 +43,7 @@ int my_cp(int arg_count, char *args[]) {
 	FILE *copy_fp = fopen(args[1], "w");
 
 	if(fp != NULL && copy_fp != NULL) {
-		while(fgets(buf, 256, fp) != NULL) 
+		while(fgets(buf, DEFAULT_BUFFER_SIZE, fp) != NULL) 
 		fputs(buf, copy_fp);
 
 		fclose(fp);
@@ -58,7 +58,7 @@ int my_cp(int arg_count, char *args[]) {
 }
 
 char* my_cat(int is_print_data, int arg_count, char *args[]) {
-	char buf[256], *write_buf = malloc(256*sizeof(char));
+	char buf[DEFAULT_BUFFER_SIZE], *write_buf = malloc(DEFAULT_BUFFER_SIZE*sizeof(char));
 
 	if(arg_count < 1) {
 		printf("Usage: mycat <file_name>");
@@ -68,7 +68,7 @@ char* my_cat(int is_print_data, int arg_count, char *args[]) {
 
 	FILE *fp = fopen(args[0] , "r");
 	if(fp != NULL) {
-		while(fgets(buf, 256, fp) != NULL) {
+		while(fgets(buf, DEFAULT_BUFFER_SIZE, fp) != NULL) {
 			if(is_print_data) printf("%s",buf);
 			strcat(write_buf, buf);
 		}
@@ -85,7 +85,7 @@ char* my_cat(int is_print_data, int arg_count, char *args[]) {
 
 char* my_head(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 	int num_print_lines = DEFAULT_NUM_PRINT_LINES, str_len = 0;
-	char buf[256], *write_buf = malloc(256*sizeof(char));
+	char buf[DEFAULT_BUFFER_SIZE], *write_buf = malloc(DEFAULT_BUFFER_SIZE*sizeof(char));
 
 	if(arg_count < 1 && !pipe_data) {
 		printf("Usage: myhead <file_name>");
@@ -96,7 +96,7 @@ char* my_head(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 	if(arg_count) {
 		FILE *fp = fopen(args[0] , "r");
 		if(fp != NULL) {
-			while(num_print_lines-- && fgets(buf, 256, fp) != NULL) {
+			while(num_print_lines-- && fgets(buf, DEFAULT_BUFFER_SIZE, fp) != NULL) {
 				if(is_print_data) printf("%s",buf);
 				strcat(write_buf, buf);
 			}
@@ -111,7 +111,7 @@ char* my_head(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 			if(is_print_data) printf("%c",*pipe_data);
 			if(*pipe_data++ == '\n') num_print_lines--;	
 		}
-		
+
 		write_buf[str_len] = '\0';	
 	}
 
@@ -122,7 +122,7 @@ char* my_head(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 
 char* my_tail(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 	int num_print_lines = DEFAULT_NUM_PRINT_LINES, str_len = 0, total_lines = 0, skip_lines = 0;
-	char buf[256], *write_buf = malloc(256*sizeof(char)), *cur_data_ptr;
+	char buf[DEFAULT_BUFFER_SIZE], *write_buf = malloc(DEFAULT_BUFFER_SIZE*sizeof(char)), *cur_data_ptr;
 
 	if(arg_count < 1 && !pipe_data) {
 		printf("Usage: mytail <file_name>");
@@ -133,12 +133,12 @@ char* my_tail(int is_print_data, int arg_count, char *args[], char *pipe_data) {
 	if(arg_count) {
 		FILE *fp = fopen(args[0] , "r");
 		if(fp != NULL) {
-			while(fgets(buf, 256, fp) != NULL) total_lines++;
+			while(fgets(buf, DEFAULT_BUFFER_SIZE, fp) != NULL) total_lines++;
 
 			fseek(fp, 0, SEEK_SET);
 			skip_lines = total_lines - num_print_lines;
 
-			while(fgets(buf, 256, fp) != NULL) {
+			while(fgets(buf, DEFAULT_BUFFER_SIZE, fp) != NULL) {
 				if(is_print_data && skip_lines <= 0) printf("%s",buf);
 				if(skip_lines <= 0) strcat(write_buf, buf);
 
@@ -239,9 +239,6 @@ int main() {
 
 	while(strcmp(trim(token), "exit")) {
 		while(token) {
-			//token_cmd = malloc(DEFAULT_BUFFER_SIZE*sizeof(char));
-			//strcpy(token_cmd, token);
-
 			args_token = trim(strtok_r(token, " ", &args_ptr));
 			cmd = trim(args_token);
 
